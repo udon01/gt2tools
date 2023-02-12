@@ -1,0 +1,11 @@
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\bin\Debug\GT3DataSplitter.exe.config
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\bin\Debug\GT3DataSplitter.exe
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\bin\Debug\GT3DataSplitter.pdb
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\bin\Debug\CsvHelper.dll
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\bin\Debug\CsvHelper.xml
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\obj\Debug\GT3DataSplitter.csproj.AssemblyReference.cache
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\obj\Debug\GT3DataSplitter.csproj.SuggestedBindingRedirects.cache
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\obj\Debug\GT3DataSplitter.csproj.CoreCompileInputs.cache
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\obj\Debug\GT3DataSplitter.csproj.CopyComplete
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\obj\Debug\GT3DataSplitter.exe
+C:\Users\udon01\Downloads\gt2tools-master\GT3DataSplitter_US\GT3DataSplitter\obj\Debug\GT3DataSplitter.pdb
