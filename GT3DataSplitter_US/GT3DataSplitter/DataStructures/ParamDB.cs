@@ -202,7 +202,7 @@ namespace GT3.DataSplitter
 
         public void WriteData()
         {
-            using (FileStream file = new FileStream("paramdb_eu.db", FileMode.Create, FileAccess.ReadWrite))
+            using (FileStream file = new FileStream("paramdb_us.db", FileMode.Create, FileAccess.ReadWrite))
             {
                 const uint DataTableCount = 0x24;
                 file.WriteCharacters("GTAR");
