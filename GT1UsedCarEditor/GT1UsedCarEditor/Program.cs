@@ -6,47 +6,67 @@ namespace GT1.UsedCarEditor
     {
         static void Main(string[] args)
         {
-            string[] manufacturers = new string[] { "Toyota", "Nissan", "Mitsubishi", "Honda", "Mazda", "Subaru" };
-
-            using (FileStream file = new("_unknown0004.usedcar", FileMode.Open, FileAccess.Read))
+            if (args.Length != 1)
             {
-                using (TextWriter output = new StreamWriter("dump.txt"))
+                Console.WriteLine("Usage:\r\nGT1UsedCarEditor <used car file>\r\nOR\r\nGT1UsedCarEditor <CSV directory>");
+                return;
+            }
+
+            FileAttributes attributes = File.GetAttributes(args[0]);
+
+            if (attributes.HasFlag(FileAttributes.Directory))
+            {
+                if (!Directory.Exists(args[0]))
                 {
-                    file.Position = 0x10; // skip header
-                    const int WeekCount = 60;
-
-                    uint[] blockPointers = new uint[WeekCount];
-                    for (int i = 0; i < WeekCount; i++)
-                    {
-                        blockPointers[i] = file.ReadUInt();
-                    }
-
-                    for (int i = 0; i < WeekCount; i++)
-                    {
-                        file.Position = blockPointers[i];
-                        output.WriteLine($"Week {i}");
-                        output.WriteLine();
-
-                        foreach (string manufacturer in manufacturers)
-                        {
-                            output.WriteLine(manufacturer);
-                            uint carCount = file.ReadUInt();
-                            output.WriteLine($"{carCount} cars");
-                            output.WriteLine();
-
-                            for (int j = 0; j < carCount; j++)
-                            {
-                                ushort price = file.ReadUShort();
-                                byte carID = file.ReadSingleByte();
-                                byte colourID = file.ReadSingleByte();
-                                output.WriteLine($"Car ID: {carID:X2} Colour ID: {colourID:X2} Price: {price * 10} Cr");
-                            }
-                            output.WriteLine();
-                        }
-                        output.WriteLine();
-                        output.WriteLine();
-                    }
+                    Console.WriteLine("Directory does not exist");
+                    return;
                 }
+                WriteFile(args[0]);
+            }
+            else if (File.Exists(args[0]))
+            {
+                ReadFile(args[0]);
+            }
+            else
+            {
+                Console.WriteLine("File does not exist");
+            }
+        }
+
+        private static void ReadFile(string path)
+        {
+            UsedCarList list;
+            using (FileStream file = new(path, FileMode.Open, FileAccess.Read))
+            {
+                string magic = file.ReadCharacters();
+                if (magic != "@(#)USEDCAR")
+                {
+                    Console.WriteLine("Not a USEDCAR file");
+                    return;
+                }
+                file.Position = 0xE;
+                if (file.ReadUShort() != 6)
+                {
+                    Console.WriteLine("Unexpected header value");
+                    return;
+                }
+                list = UsedCarList.ReadFromFile(file);
+            }
+
+            string directory = Path.GetFileNameWithoutExtension(path);
+            Directory.CreateDirectory(directory);
+            list.WriteToCSV(directory);
+        }
+
+        private static void WriteFile(string path)
+        {
+            UsedCarList list = UsedCarList.ReadFromCSV(path);
+            using (FileStream file = new($"{Path.GetFileNameWithoutExtension(path)}.usedcar", FileMode.Create, FileAccess.Write))
+            {
+                file.WriteCharacters("@(#)USEDCAR");
+                file.Position = 0xE;
+                file.WriteUShort(6); // manufacturer count?
+                list.WriteToFile(file);
             }
         }
     }

@@ -1,0 +1,224 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:se="using:GT2.SaveEditor.GUI"
+        xmlns:li="using:GT2.SaveEditor.GTMode.License"
+        mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="600"
+        x:Class="GT2.SaveEditor.GUI.MainWindow"
+        Title="GT2 Save Editor"
+        x:DataType="se:MainWindowViewModel">
+  <Design.DataContext>
+    <se:MainWindowViewModel />
+  </Design.DataContext>
+  <Window.Resources>
+    <se:LicenseTestResultButtonConverter x:Key="LicenseTestResultButtonConverter" />
+  </Window.Resources>
+  <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Open"/>
+        <MenuItem Header="_Save" Click="MenuItem_Click"/>
+        <Separator/>
+        <MenuItem Header="_Exit"/>
+      </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="About"/>
+      </MenuItem>
+    </Menu>
+    <TabControl Margin="5" SelectedIndex="0">
+      <TabItem Header="Settings" FontSize="18">
+        <TabControl Margin="-10 5" TabStripPlacement="Left">
+          <TabItem Header="Global" FontSize="18">
+            <Grid RowDefinitions="40,40,40,40,40,40,40,40,40" ColumnDefinitions="130,*">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Language</TextBlock>
+              <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding LanguageEnum}" SelectedItem="{Binding Data.Language}" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Player Name</TextBlock>
+              <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" MaxLength="11" Text="{Binding Data.GTModeProgress.Garage.PlayerName}"></TextBox>
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Replay Info</TextBlock>
+              <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ReplayInfoEnum}" SelectedItem="{Binding Data.GlobalSettings.ReplayInfo}" />
+              <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Camera Position</TextBlock>
+              <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding CameraPositionEnum}" SelectedItem="{Binding Data.GlobalSettings.CameraPosition}" />
+              <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Chase View</TextBlock>
+              <ComboBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ChaseViewEnum}" SelectedItem="{Binding Data.GlobalSettings.ChaseView}" />
+              <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Course Map</TextBlock>
+              <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Data.GlobalSettings.CourseMap}" />
+              <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">View Angle</TextBlock>
+              <ComboBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ViewAngleEnum}" SelectedItem="{Binding Data.GlobalSettings.ViewAngle}" />
+              <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Music Volume</TextBlock>
+              <Slider Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Minimum="0" Maximum="255" Ticks="0,16,32,48,64,80,96,112,128,144,160,176,192,208,224,240,255" IsSnapToTickEnabled="True" Value="{Binding Data.GlobalSettings.MusicVolume}" />
+              <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center">SFX Volume</TextBlock>
+              <Slider Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Minimum="0" Maximum="255" Ticks="0,16,32,48,64,80,96,112,128,144,160,176,192,208,224,240,255" IsSnapToTickEnabled="True" Value="{Binding Data.GlobalSettings.SFXVolume}" />
+            </Grid>
+          </TabItem>
+          <TabItem Header="Arcade" FontSize="18">
+            <Grid RowDefinitions="40,40" ColumnDefinitions="130,*">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Damage Enabled</TextBlock>
+              <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Data.ArcadeSettings.DamageEnabled}" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Laps</TextBlock>
+              <NumericUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" FormatString="0" Minimum="1" Maximum="99" Value="{Binding Data.ArcadeSettings.Laps}" />
+            </Grid>
+          </TabItem>
+          <TabItem Header="2 Player" FontSize="18">
+            <Grid RowDefinitions="40,40,40,40,40" ColumnDefinitions="130,*">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Tyre Wear</TextBlock>
+              <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding TireDamageEnum}" SelectedItem="{Binding Data.TwoPlayerSettings.TireDamage}" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Damage Enabled</TextBlock>
+              <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Data.TwoPlayerSettings.DamageEnabled}" />
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Laps</TextBlock>
+              <NumericUpDown Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" FormatString="0" Minimum="1" Maximum="99" Value="{Binding Data.TwoPlayerSettings.Laps}" />
+              <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Handicap Start</TextBlock>
+              <Slider Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Minimum="-100" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" x:Name="HandicapStart" Value="{Binding Data.TwoPlayerSettings.Handicap}" />
+              <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="210 0 0 0" Text="{Binding #HandicapStart.Value, Converter={x:Static se:Converters.HandicapStartConverter}}" />
+              <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Slow Car Boost</TextBlock>
+              <ComboBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding BoostEnum}" SelectedItem="{Binding Data.TwoPlayerSettings.Boost}" />
+            </Grid>
+          </TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem Header="1P Controller" FontSize="18">
+        <TabControl Margin="-10 5" TabStripPlacement="Left">
+          <TabItem Header="Digital" FontSize="18">
+            <Grid RowDefinitions="40,40,40,40,40,40,40,40,40,40" ColumnDefinitions="110,*">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Steer Left</TextBlock>
+              <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.SteerLeftButton}" IsEnabled="False" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Steer Right</TextBlock>
+              <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.SteerRightButton}" IsEnabled="False" />
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Accelerate</TextBlock>
+              <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.AccelerateButton}" />
+              <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Brake</TextBlock>
+              <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.BrakeButton}" />
+              <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Reverse</TextBlock>
+              <ComboBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.ReverseButton}" />
+              <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Handbrake</TextBlock>
+              <ComboBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.HandbrakeButton}" />
+              <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Shift Up</TextBlock>
+              <ComboBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.ShiftUpButton}" />
+              <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Shift Down</TextBlock>
+              <ComboBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.ShiftDownButton}" />
+              <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center">Rear View</TextBlock>
+              <ComboBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.RearViewButton}" />
+              <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Change Views</TextBlock>
+              <ComboBox Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.DigitalController.ChangeViewsButton}" />
+            </Grid>
+          </TabItem>
+          <TabItem Header="Analog" FontSize="18">
+            <Grid RowDefinitions="40,40,40,40,40,40,40,40,40,40,40" ColumnDefinitions="110,*">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Steer Left</TextBlock>
+              <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding AnalogueSteeringButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.SteerLeftButton}" IsEnabled="False" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Steer Right</TextBlock>
+              <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding AnalogueSteeringButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.SteerRightButton}" IsEnabled="False" />
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Accelerate</TextBlock>
+              <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding AnalogueAccelerateBrakeButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.AccelerateButton}" />
+              <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Brake</TextBlock>
+              <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding AnalogueAccelerateBrakeButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.BrakeButton}" />
+              <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Reverse</TextBlock>
+              <ComboBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.ReverseButton}" />
+              <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Handbrake</TextBlock>
+              <ComboBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.HandbrakeButton}" />
+              <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Shift Up</TextBlock>
+              <ComboBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.ShiftUpButton}" />
+              <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Shift Down</TextBlock>
+              <ComboBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.ShiftDownButton}" />
+              <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center">Rear View</TextBlock>
+              <ComboBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.RearViewButton}" />
+              <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Change Views</TextBlock>
+              <ComboBox Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding ControllerButtonEnum}" SelectedItem="{Binding Data.Player1Controller.AnalogueController.ChangeViewsButton}" />
+              <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center">Vibration</TextBlock>
+              <CheckBox Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Data.Player1Controller.AnalogueController.VibrationEnabled}" />
+            </Grid>
+          </TabItem>
+          <TabItem Header="NeGcon" FontSize="18">
+            <Grid RowDefinitions="40,40,40,40,40,40,40,40,40,40" ColumnDefinitions="110,*">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Steer Left</TextBlock>
+              <ComboBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconSteeringButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.SteerLeftButton}" IsEnabled="False" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Steer Right</TextBlock>
+              <ComboBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconSteeringButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.SteerRightButton}" IsEnabled="False" />
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Accelerate</TextBlock>
+              <ComboBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconAccelerateBrakeButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.AccelerateButton}" />
+              <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Brake</TextBlock>
+              <ComboBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconAccelerateBrakeButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.BrakeButton}" />
+              <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Reverse</TextBlock>
+              <ComboBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.ReverseButton}" />
+              <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Handbrake</TextBlock>
+              <ComboBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.HandbrakeButton}" />
+              <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Shift Up</TextBlock>
+              <ComboBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.ShiftUpButton}" />
+              <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Shift Down</TextBlock>
+              <ComboBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.ShiftDownButton}" />
+              <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center">Rear View</TextBlock>
+              <ComboBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.RearViewButton}" />
+              <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Change Views</TextBlock>
+              <ComboBox Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Width="200" ItemsSource="{Binding NegconButtonEnum}" SelectedItem="{Binding Data.Player1Controller.NegconController.ChangeViewsButton}" />
+            </Grid>
+          </TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem Header="2P Controller" FontSize="18">
+      </TabItem>
+      <TabItem Header="Licenses" FontSize="18">
+        <TabControl Margin="5" TabStripPlacement="Left">
+          <TabItem Header="S" FontSize="18">
+          </TabItem>
+          <TabItem Header="IA" FontSize="18">
+          </TabItem>
+          <TabItem Header="IB" FontSize="18">
+          </TabItem>
+          <TabItem Header="IC" FontSize="18">
+          </TabItem>
+          <TabItem Header="A" FontSize="18">
+          </TabItem>
+          <TabItem Header="B" FontSize="18">
+            <ScrollViewer>
+              <ItemsControl ItemsSource="{Binding BLicense}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Spacing="10"/>
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Expander VerticalAlignment="Top">
+                      <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="5" Height="50" VerticalAlignment="Top">
+                          <Canvas Width="10" Height="50" Background="{Binding BestResult, Converter={x:Static se:Converters.LicenseResultColourConverter}}" />
+                          <Label Margin="5" VerticalAlignment="Center" FontSize="20" Width="70" Content="{Binding Name}" />
+                          <RadioButton GroupName="{Binding Name}" Content="None" Margin="5" VerticalAlignment="Center" IsChecked="{Binding BestResult, Converter={StaticResource LicenseTestResultButtonConverter}, ConverterParameter=None}"/>
+                          <RadioButton GroupName="{Binding Name}" Content="Kids Prize" Margin="5" VerticalAlignment="Center" IsChecked="{Binding BestResult, Converter={StaticResource LicenseTestResultButtonConverter}, ConverterParameter=KidsPrize}"/>
+                          <RadioButton GroupName="{Binding Name}" Content="Bronze" Margin="5" VerticalAlignment="Center" IsChecked="{Binding BestResult, Converter={StaticResource LicenseTestResultButtonConverter}, ConverterParameter=Bronze}"/>
+                          <RadioButton GroupName="{Binding Name}" Content="Silver" Margin="5" VerticalAlignment="Center" IsChecked="{Binding BestResult, Converter={StaticResource LicenseTestResultButtonConverter}, ConverterParameter=Silver}"/>
+                          <RadioButton GroupName="{Binding Name}" Content="Gold" Margin="5" VerticalAlignment="Center" IsChecked="{Binding BestResult, Converter={StaticResource LicenseTestResultButtonConverter}, ConverterParameter=Gold}"/>
+                          <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="40 0 0 0">Records</TextBlock>
+                        </StackPanel>
+                      </Expander.Header>
+                      <ItemsControl ItemsSource="{Binding Records}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Height="40" Margin="50 0 0 0" VerticalAlignment="Top">
+                              <Label VerticalAlignment="Center" Width="100" Content="{ReflectionBinding Sector1Time, Converter={x:Static se:Converters.RecordTimeConverter}}" />
+                              <Label VerticalAlignment="Center" Width="100" Content="{ReflectionBinding Sector2Time, Converter={x:Static se:Converters.RecordTimeConverter}}" />
+                              <Label VerticalAlignment="Center" Width="100" Content="{ReflectionBinding Sector3Time, Converter={x:Static se:Converters.RecordTimeConverter}}" />
+                              <Label VerticalAlignment="Center" Width="100" Content="{ReflectionBinding TotalTime, Converter={x:Static se:Converters.RecordTimeConverter}}" />
+                              <Label VerticalAlignment="Center" Width="100" Content="{ReflectionBinding Speed, Converter={x:Static se:Converters.RecordSpeedConverter}}" />
+                              <Label VerticalAlignment="Center" Width="100" Content="{ReflectionBinding Name}" />
+                            </StackPanel>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Expander>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem Header="Arcade" FontSize="18">
+      </TabItem>
+      <TabItem Header="GT Mode" FontSize="18">
+      </TabItem>
+      <TabItem Header="Machine Test" FontSize="18">
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</Window>

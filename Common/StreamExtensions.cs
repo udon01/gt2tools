@@ -79,9 +79,14 @@ namespace StreamExtensions
 
         public static string ReadCharacters(this Stream stream)
         {
+            return ReadCharacters(stream, Encoding.ASCII);
+        }
+
+        public static string ReadCharacters(this Stream stream, Encoding encoding)
+        {
             byte characterByte;
             List<byte> bytes = new List<byte>();
-            while(true)
+            while (true)
             {
                 characterByte = stream.ReadSingleByte();
                 if (characterByte == 0)
@@ -90,12 +95,17 @@ namespace StreamExtensions
                 }
                 bytes.Add(characterByte);
             }
-            return Encoding.ASCII.GetString(bytes.ToArray());
+            return encoding.GetString(bytes.ToArray());
         }
 
         public static void WriteCharacters(this Stream stream, string characters)
         {
-            stream.Write(Encoding.ASCII.GetBytes(characters));
+            WriteCharacters(stream, characters, Encoding.ASCII);
+        }
+
+        public static void WriteCharacters(this Stream stream, string characters, Encoding encoding)
+        {
+            stream.Write(encoding.GetBytes(characters));
         }
 
         public static byte[] ToByteArray(this string value)
@@ -126,5 +136,31 @@ namespace StreamExtensions
                 stream.Position++;
             }
         }
+
+        public static bool ReadByteAsBool(this Stream stream) => stream.ReadSingleByte() == 1;
+
+        public static void WriteBoolAsByte(this Stream stream, bool value) => stream.WriteByte((byte)(value ? 1 : 0));
+
+        public static sbyte ReadSByte(this Stream stream) => (sbyte)stream.ReadByte();
+
+        public static void WriteSByte(this Stream stream, sbyte value) => stream.WriteByte((byte)value);
+
+        // Original ReadShort / WriteShort implementations above give a value of 0 for 0xFFFF... whoops
+        // Retain the old behaviour until tools that rely on it can be audited and fixed
+        public static short ReadShortFixed(this Stream stream)
+        {
+            byte[] rawValue = new byte[sizeof(short)];
+            stream.Read(rawValue);
+            return rawValue.ReadShortFixed();
+        }
+
+        public static short ReadShortFixed(this byte[] array) => BitConverter.ToInt16(array, 0);
+
+        public static void WriteShortFixed(this Stream stream, short value)
+        {
+            stream.Write(value.ToByteArray(), 0, sizeof(short));
+        }
+
+        public static byte[] ToByteArray(this short value) => BitConverter.GetBytes(value);
     }
 }
